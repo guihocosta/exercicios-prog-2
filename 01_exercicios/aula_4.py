@@ -1,0 +1,56 @@
+def criar_matriz_17(m, n):
+    l = []
+    for i in range(m):
+        l.append([0] * n)
+    return l
+
+def imprimir_matriz_18(m):
+    for linha in m:
+        for coluna in linha:
+            print(coluna, end=" \t")
+        print()
+
+def somar_matrizes_19(a, b):
+    n_linhas = len(a)
+    n_colunas = len(a[0])
+
+    c = criar_matriz_17(n_linhas, n_colunas)
+
+    for i in range(n_linhas):
+        for j in range(n_colunas):
+            c[i][j] = a[i][j] + b[i][j]
+    
+    return c
+
+def calcular_media_20(l):
+    soma = 0
+    for x in l:
+        soma += x
+    return soma/len(l)
+
+
+def notas_20():
+
+    qtd_alunos = int(input())
+    qtd_notas = int(input())
+    soma_geral = 0.0
+
+    matriz = criar_matriz_17(qtd_alunos, qtd_notas)
+    for i in range(qtd_alunos):
+        for j in range(qtd_notas):
+            nota = float(input())
+            matriz[i][j] = nota
+    
+    for i in range(len(matriz)):
+        media_aluno = calcular_media_20(matriz[i])
+        soma_geral += media_aluno
+        print(f'Aluno {i+1}: {media_aluno}')
+    
+    if qtd_alunos != 0:
+        print(f'Média da turma: {soma_geral/qtd_alunos}')
+
+def matriz_identidade_21(m):
+    
+
+matriz_identidade_21([[2,3]])
+

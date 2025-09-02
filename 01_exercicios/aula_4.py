@@ -93,26 +93,88 @@ def triangular_inferior_23(M):
             if j > i:
                 M[i][j] = 0
 
-def cavalo_24(m):
-    posicao_cavalo = ()
-    for i in range(len(m)):
-        for j in range(len(m[0])):
-            if m[i][j] == 1:
-                posicao_cavalo = i, j
-    print(posicao_cavalo)
+def cavalo_24(matriz_m):
+    posicao_cavalo = None
+    for i in range(8):
+        for j in range(8):
+            if matriz_m[i][j] == 1:
+                posicao_cavalo = (i, j)
 
-xadrez = [
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,1,0,0,0,0],
-    [0,0,0,0,0,0,0,0],
-    [0,0,0,0,0,0,0,0]
-]
+    if posicao_cavalo is None:
+        return
 
-cavalo_24(xadrez)
+    linha_cavalo, coluna_cavalo = posicao_cavalo
 
+    movimentos_possiveis = [
+        (-2, -1), (-2, 1),
+        (2, -1), (2, 1),
+        (-1, -2), (1, -2),
+        (-1, 2), (1, 2)
+    ]
 
+    contador_movimentos_validos = 0
 
+    for dl, dc in movimentos_possiveis:
+        nova_linha = linha_cavalo + dl
+        nova_coluna = coluna_cavalo + dc
+
+        if 0 <= nova_linha < 8 and 0 <= nova_coluna < 8:
+            contador_movimentos_validos += 1
+
+    print(contador_movimentos_validos)
+
+def robo_24(arena, instrucoes):
+    num_linhas = len(arena)
+    num_colunas = len(arena[0])
+
+    movimentos = [(-1, 0), (0, 1), (1, 0), (0, -1)]
+
+    pos_linha = -1
+    pos_coluna = -1
+    orientacao_atual = -1
+    
+    robo_encontrado = False
+    
+    i = 0
+    while i < num_linhas and not robo_encontrado:
+        j = 0
+        while j < num_colunas and not robo_encontrado:
+            celula = arena[i][j]          
+            if celula == 'N' or celula == 'L' or celula == 'S' or celula == 'O':
+                pos_linha = i
+                pos_coluna = j
+
+                if celula == 'N':
+                    orientacao_atual = 0
+                elif celula == 'L':
+                    orientacao_atual = 1
+                elif celula == 'S':
+                    orientacao_atual = 2
+                elif celula == 'O':
+                    orientacao_atual = 3            
+                arena[i][j] = '.'
+                robo_encontrado = True
+            j += 1
+        i += 1
+
+    figurinhas_coletadas = 0
+
+    for instrucao in instrucoes:
+        if instrucao == 'D':
+            orientacao_atual = (orientacao_atual + 1) % 4
+        elif instrucao == 'E':
+            orientacao_atual = (orientacao_atual - 1 + 4) % 4
+        elif instrucao == 'F':
+            delta_linha, delta_coluna = movimentos[orientacao_atual]
+            proxima_linha = pos_linha + delta_linha
+            proxima_coluna = pos_coluna + delta_coluna
+
+            if 0 <= proxima_linha < num_linhas and 0 <= proxima_coluna < num_colunas:
+                if arena[proxima_linha][proxima_coluna] != '#':
+                    pos_linha = proxima_linha
+                    pos_coluna = proxima_coluna
+
+                    if arena[pos_linha][pos_coluna] == '*':
+                        figurinhas_coletadas += 1
+                        arena[pos_linha][pos_coluna] = '.'
+    return figurinhas_coletadas
